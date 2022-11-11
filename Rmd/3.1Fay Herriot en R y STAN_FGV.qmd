@@ -1,0 +1,269 @@
+---
+title: "Fay Herriot en R y STAN"
+subtitle: "CEPAL - División de Estadísticas Sociales"
+author: "Andrés Gutiérrez - Stalyn Guerrero"
+format: html
+project:
+  type: website
+  output-dir: docs
+---
+
+```{r setup, include=FALSE, message=FALSE, error=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  cache.path = "0Recursos/3.1FGV/",
+  fig.path = "0Recursos/3.1FGV_fig/"
+)
+library(printr)
+library(kableExtra)
+library(tidyverse)
+tba <- function(dat, cap = NA){
+  kable(dat,
+      format = "html", digits =  4,
+      caption = cap) %>% 
+     kable_styling(bootstrap_options = "striped", full_width = F)%>%
+         kable_classic(full_width = F, html_font = "Arial Narrow")
+}
+
+```
+
+## Transformaciones FGV 
+
+Uno de los insumos más importantes en el modelo de áreas es la 
+varianza del estimador directo, a nivel de dominio, la cual no puede calcularse de ningún modo. En correspondencia, este valor debe estimarse desde los datos recolectados en cada dominio. Sin embargo, 
+en dominios en las que se cuenta con un tamaño de muestra muy pequeño, estas estimaciones no tendrán un buen comportamiento. Por ende, es muy útil utilizar un modelo de **suavizamiento** de las varianzas para 
+eliminar el ruido y la volatilidad de estas estimaciones y extraer la verdadera señal del proceso
+
+Hidiroglou (2019) afirma que $E_{mp}\left(\hat{\theta}^{dir}_d\right)=\boldsymbol{x}_{d}\boldsymbol{\beta}$ y $V_{mp}\left(\hat{\theta}^{dir}_d\right)=\sigma_{u}^2+\tilde{\psi}^2_{d}$, en donde el subíndice  $mp$ hace referencia a la inferencia doble que se debe tener en cuenta en este tipo de ajustes y define la medida de probabilidad conjunta entre el modelo y el diseño de muestreo.  
+
+-   $m$ hace referencia a la medida de probabilidad inducida por el modelamiento y la inclusión de las covariables auxiliares ($\boldsymbol{x}_{d}$).
+
+-   $p$ hacer referencia a la medida de probabilidad inducida por el diseño de muestreo complejo que 
+induce las estimaciones directas. 
+
+Además, $\tilde{\psi}^2_{d} = E_m\left(\tilde{\psi}^2_{d}\right)$ es la varianza suavizada del estimador directo $\hat{\theta}^{dir}_d$.  
+
+
+## Datos de la encuesta
+
+```{r}
+library(tidyverse)
+library(magrittr)
+source("0Recursos/0Funciones/0Source_FH.R")
+
+encuesta <- readRDS("../Data/encuestaPER21N.rds") %>% 
+  transmute(
+    depto,
+    provi = substr(ubigeo,1,4),
+    wkx = `_fep`, 
+    upm = `_upm`,
+    estrato = `_estrato`,
+    pobreza = ifelse(ingcorte < lp, 1 , 0))
+
+```
+
+-   *depto*: Corresponde al código asignado a la segunda división administrativa del país.
+
+-   *lp* linea de pobreza definidas por CEPAL. 
+
+-   Factor de expansión por persona (*fep*)
+
+
+```{r, echo=FALSE}
+tba(encuesta %>% head(10))
+```
+
+Definir el diseño muestral
+
+```{r}
+library(survey)
+library(srvyr)
+options(survey.lonely.psu = "adjust")
+
+diseno <-
+  as_survey_design(
+    ids = upm,
+    weights = wkx,
+    strata = estrato,
+    nest = TRUE,
+    .data = encuesta
+  )
+
+```
+
+Para la estimación directa de la proporción se emplea la función `direct.supr`, dando como resultado.
+
+```{r}
+directoprovi <- direct.supr(design.base = diseno,
+                             variable = pobreza, 
+                             group = provi,
+                             upm = upm,
+                             estrato = estrato)
+
+directoprovi %>%
+  group_by(Flag) %>%
+  summarise(n = n()) %>% 
+  arrange(n)
+```
+
+# Transformación Arcoseno, calculo del DEFF y varianza zd 
+
+```{r}
+base_sae <- directoprovi %>% filter(Flag != "Excluir") %>%
+  transmute(
+    provi = provi,
+    nd = n,
+    n_effec = n.eff,
+    pobreza = p,
+    pobreza_T = asin(sqrt(pobreza)),
+    vardir = ee ^ 2,
+    cv = CV,
+    var_zd = 1 / (4 * n_effec),
+    deff_provi = deff
+  )
+
+base_sae1 <- base_sae [base_sae$vardir>0,]
+# View(base_sae1)
+tba(head(base_sae1))
+```
+
+
+
+```{r}
+baseFGV <-  base_sae1 %>% 
+  select(provi, pobreza, nd, vardir) %>%
+  mutate(ln_sigma2 = log(vardir))
+
+```
+
+# Análisis gráfico
+
+```{r}
+theme_set(theme_bw())
+
+# pobreza vs Ln_sigma2 #
+
+p1 <- ggplot(baseFGV, aes(x = pobreza, y = ln_sigma2)) +
+  geom_point() +
+  geom_smooth(method = "loess") +
+  xlab("pobreza")
+
+# Tamaño de muestra vs Ln_sigma2 #
+
+p2 <- ggplot(baseFGV, aes(x = nd, y = ln_sigma2)) + 
+  geom_point() +
+  geom_smooth(method = "loess") + 
+  xlab("Tamaño de muestra")
+
+# Número de pobres vs Ln_sigma2 #
+
+p3 <- ggplot(baseFGV, 
+             aes(x = pobreza * nd, y = ln_sigma2)) + 
+  geom_point() +
+  geom_smooth(method = "loess") + 
+  xlab("Número de pobres")
+
+# Raiz_pobreza vs Ln_sigma2 #
+
+p4 <- ggplot(baseFGV, 
+             aes(x = sqrt(pobreza), y = ln_sigma2)) + 
+  geom_point() +
+  geom_smooth(method = "loess") + 
+  xlab("Raiz cuadrada de pobreza")
+
+library(patchwork)
+(p1 | p2) / (p3 | p4)
+```
+
+# Modelo para la varianza
+
+```{r}
+FGV1 <- lm(ln_sigma2 ~ 1 + pobreza + 
+             nd + I(nd ^ 2) + I(pobreza * nd) +
+             I(sqrt(pobreza)) + I(sqrt(nd)) + 
+             I(sqrt(pobreza * nd)),
+     data = baseFGV)
+summary(FGV1)
+```
+
+# Ponderador FGV
+
+```{r}
+delta.hat = sum(baseFGV$vardir) / 
+  sum(exp(fitted.values(FGV1)))
+delta.hat
+```
+
+# Varianza suavizada 
+
+
+```{r}
+hat.sigma <- data.frame(provi = baseFGV$provi,
+                        hat_var = delta.hat * exp(fitted.values(FGV1)))
+
+baseFGV$ln_sigma2_pred <- hat.sigma$hat_var
+```
+
+# Validación del modelo para la FGV
+
+```{r}
+par(mfrow = c(2, 2))
+plot(FGV1)
+```
+
+# Comparación entre varianza estimada con pronosticada por la FGV
+
+```{r}
+ggplot(baseFGV, 
+       aes(x = ln_sigma2, y = ln_sigma2_pred)) + 
+  geom_point() +
+  geom_smooth(method = "loess")
+```
+
+# Varianza suavizada
+
+```{r}
+prediccion_ln_0 = predict(FGV1, newdata = base_sae %>%
+                            filter(!is.na(pobreza))) 
+base_sae <- base_sae %>% 
+  left_join(hat.sigma, by = "provi")
+
+base_sae$hat_var[base_sae$vardir == 0 & !is.na(base_sae$vardir)] <-
+  delta.hat * exp(prediccion_ln_0)
+```
+
+
+```{r}
+base_FH <- base_sae %>%
+  mutate(
+    deff_provi = ifelse(is.nan(deff_provi), 1,
+                         deff_provi),
+    deff_FGV = ifelse(
+      vardir == 0 ,
+      1,
+      hat_var / (vardir / deff_provi)
+    ),
+    # Criterio MDS para regularizar el DeffFGV
+    deff_FGV = ifelse(deff_FGV < 1, 1, deff_FGV),
+    n_eff_FGV = nd / deff_FGV
+  )
+
+saveRDS(object = base_FH, "../Data/base_FH_2019.rds")
+```
+
+# Análisis gráfico
+
+```{r}
+ggplot(base_FH %>% filter(!is.na(hat_var)) %>% 
+         arrange(nd), aes(x = hat_var, y = vardir)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", col = 2) + 
+  labs(x = "FGV", y = "VarDirEst") +
+  ylab("Varianza del Estimador Directo")
+
+
+```
+
