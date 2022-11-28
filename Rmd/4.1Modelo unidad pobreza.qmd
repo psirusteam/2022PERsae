@@ -422,7 +422,7 @@ Mapa_lp
 
 
 ```{r, echo=FALSE, fig.cap= "Tasa de pobreza por provincia, sexo y edad", out.height="300%"}
-## Leer Shape del pais
+## Leer Shapefile del pais
 mrp_estimate_sexo_edad <-
   Aux_Agregado(poststrat = poststrat_df %>% 
                  mutate(depto = str_sub(provi, 1,2)),

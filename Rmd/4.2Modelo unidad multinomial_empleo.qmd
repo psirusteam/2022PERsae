@@ -516,7 +516,7 @@ fit_mcmc$save_object(
 
 La lectura del modelo resultante se hace de la forma habitual.
 
-```{r}
+```{r, eval=FALSE}
 fit <- readRDS("../Data/fit_multinomial.rds")
 ```
 
@@ -524,9 +524,13 @@ Es posible revisar de forma visual el comportamiento de las cadenas con las func
 
 ```{r,eval=FALSE}
 library(bayesplot)
-mcmc_dens_chains(fit$draws(variables = "beta"))
-mcmc_areas(fit$draws("beta")) 
-mcmc_trace(fit$draws("beta")) 
+temp_beta <-colnames(fit$draws("beta",format = "matrix"))[1:12]
+# temp_beta <-colnames(fit$draws("beta",format = "matrix"))[13:22]
+# temp_beta <-colnames(fit$draws("beta",format = "matrix"))[23:24]
+# temp_beta <-colnames(fit$draws("beta",format = "matrix"))[25:32]
+mcmc_dens_chains(fit$draws(variables = temp_beta))
+mcmc_areas(fit$draws(temp_beta)) 
+mcmc_trace(fit$draws(temp_beta)) 
 ```
 
 ### Predicción en el censo
@@ -535,28 +539,16 @@ Después de realizar validaciones sobre las predicciones obtenidas con el modelo
 
 ```{r}
 poststrat_df <- readRDS("../Data/poststrat_multinomial.RDS") 
-```
-
-```{r, echo=FALSE}
-kable(poststrat_df %>% 
-  head(10),
-      format = "html", digits =  4,
-      caption = "Predicción en el censo") %>% 
-    kable_classic()
-
+tba(poststrat_df %>% 
+  head(10),cap = "Predicción en el censo")
 ```
 
 Realizar la predicción de los indicadores de interés.
 
 ```{r}
 Indicadores_prov <- Indicadores_censo(setdata = poststrat_df, "provi")
-```
-
-```{r, echo=FALSE}
-kable(Indicadores_prov,
-      format = "html", digits =  4,
-      caption = "Estimación para prov") %>% 
-    kable_classic()
+tba(Indicadores_prov %>% head(10),
+      cap = "Estimación para prov") 
 
 ```
 
@@ -574,15 +566,14 @@ brks_TD <- c(0,5, 10, 15, 20, 100)
 brks_TP <- c(0 ,20, 40, 60, 80,100)
 
 ## Leer Shapefile del país
-ShapeSAE <- read_sf("../Shape/secc_hog11.shp")%>% 
-  filter(nombdepto == "MONTEVIDEO") %>% 
-  mutate(prov = str_pad(codsec,width = 4,pad = "0"))
-
+ShapeSAE <- read_sf("../Shape/PROVINCIAS.shp")%>% 
+            mutate(provi = str_pad(IDPROV, pad = "0", width = 4))
+tmap_options(check.and.fix = TRUE)
 mapa <- tm_shape(ShapeSAE %>%
-                           left_join(Indicadores_prov,  by = "prov"))
+                           left_join(Indicadores_prov,  by = "provi"))
 
 
-Mapa_lp <-
+Mapa_TD <-
   mapa + tm_polygons(
     c("TD"),
     breaks = brks_TD,
@@ -591,53 +582,26 @@ Mapa_lp <-
     colorNA = "white"
   ) + tm_layout(asp = 0)
 
-Mapa_lp
-
-```
-
-Con los resultados obtenidos podemos tener predicción sobre los segmento no observados.
-
-```{r}
-Indicadores_depto <- Indicadores_censo(setdata = poststrat_df, "segm")
-```
-
-```{r, echo=FALSE}
-kable(Indicadores_segm %>% head(20),
-      format = "html", digits =  4,
-      caption = "Estimación para segmento") %>% 
-    kable_classic()
-
-```
-
-```{r, echo=FALSE}
-## Leer Shapefile del país
-ShapeSAE <- read_sf("../Shape/ine_seg_11.shp") %>% 
-  filter(nombdepto == "MONTEVIDEO") %>% 
-  mutate(prov = str_pad(codsec,width = 4,pad = "0"),
-         segm = str_pad(codseg,width = 7,pad = "0"))
-
-mapa <- tm_shape(ShapeSAE %>%
-                           left_join(Indicadores_segm,  by = "segm"))
-
-
-Mapa_lp <-
-  mapa + tm_polygons(
-    c("TD"),
-    breaks = brks_TD,
-    title = "Tasa de desocupación",
-    palette = "YlOrRd",
-    colorNA = "white"
-  ) + tm_layout(asp = 0)
-
-Mapa_lp2 <-
+Mapa_TO <-
   mapa + tm_polygons(
     c("TO"),
-    breaks = brks_TO,
+    breaks = brks_TD,
     title = "Tasa de ocupación",
     palette = "-YlOrRd",
     colorNA = "white"
   ) + tm_layout(asp = 0)
 
-Mapa_lp2
-Mapa_lp
+Mapa_TP <-
+  mapa + tm_polygons(
+    c("TO"),
+    breaks = brks_TO,
+    title = "Tasa de participación",
+    palette = "-YlOrRd",
+    colorNA = "white"
+  ) + tm_layout(asp = 0)
+
+
+tmap_arrange(list(Mapa_TD, Mapa_TO, Mapa_TP), ncol = 3, nrow = 1)
+
 ```
+

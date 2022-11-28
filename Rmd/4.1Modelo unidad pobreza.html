@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.165">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrés Gutiérrez - Stalyn Guerrero">
+
+<title>Estimación de la tasa de probreza</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="4.1Modelo unidad pobreza_files/libs/clipboard/clipboard.min.js"></script>
+<script src="4.1Modelo unidad pobreza_files/libs/quarto-html/quarto.js"></script>
+<script src="4.1Modelo unidad pobreza_files/libs/quarto-html/popper.min.js"></script>
+<script src="4.1Modelo unidad pobreza_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="4.1Modelo unidad pobreza_files/libs/quarto-html/anchor.min.js"></script>
+<link href="4.1Modelo unidad pobreza_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="4.1Modelo unidad pobreza_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="4.1Modelo unidad pobreza_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="4.1Modelo unidad pobreza_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="4.1Modelo unidad pobreza_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<script src="4.1Modelo unidad pobreza_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="4.1Modelo unidad pobreza_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Estimación de la tasa de probreza</h1>
+<p class="subtitle lead">CEPAL - División de Estadísticas Sociales</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrés Gutiérrez - Stalyn Guerrero </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Lo primero a tener en cuenta, es que no se debe usar una regresión lineal cuando se tiene una variable de tipo binario como variable dependiente, ya que no es posible estimar la probabilidad del evento estudiado de manera directa, por esta razón se emplea una regresión logística, en la que para obtener las estimaciones de la probabilidad del evento estudiado se debe realizar una transformación (logit), lo cual consiste en tomar el logaritmo de la probabilidad de éxito entre la probabilidad de fracaso, de la siguiente manera:</p>
+<p><span class="math display">\[
+\ln \frac{p}{1-p}
+\]</span> donde <span class="math inline">\(p\)</span> representa la probabilidad de éxito del evento.</p>
+<section id="modelo-de-regresión-logistica." class="level2">
+<h2 class="anchored" data-anchor-id="modelo-de-regresión-logistica.">Modelo de regresión logistica.</h2>
+<p>Sea <span class="math display">\[
+y_{ji}=\begin{cases}
+1 &amp; w_{ji}\le lp\\
+0 &amp; e.o.c.
+\end{cases}
+\]</span> donde <span class="math inline">\(w_{ji}\)</span> representa el ingreso de la <span class="math inline">\(i\)</span>-ésima persona en el <span class="math inline">\(j\)</span>-ésimo post-estrato y <span class="math inline">\(lp\)</span> es un valor limite, en particular la linea de pobreza. Empleando un modelo de regresión logística de efecto aleatorios pretende establecer la relación entre la expectativa <span class="math inline">\(\rho_{di}\)</span> de la variable dicotómica con las covariables de información auxiliar disponibles para ser incluidas. El procedimiento correspondiente a este proceso, modela el logaritmo del cociente entre la probabilidad de estar por debajo de la linea de pobreza a su complemento en relación al conjunto de covariables a nivel de unidad, <span class="math inline">\(x_{ji}\)</span>, y el conjunto de covariables a nivel de provicia, <span class="math inline">\(z_d\)</span>.</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\ln\left(\frac{\rho_{ji}}{1-\rho_{ji}}\right)=\boldsymbol{x}_{ji}^{t}\boldsymbol{\beta}+\boldsymbol{z}_{d}\boldsymbol{\gamma}
+\end{eqnarray*}
+\]</span></p>
+<p>Donde los coeficientes <span class="math inline">\(\boldsymbol{\beta}\)</span> hacen referencia a los efectos aleatorios de las variables <span class="math inline">\(x_{ji}^t\)</span> sobre las probabilidades de que la <span class="math inline">\(i\)</span>-ésima persona este por debajo de la linea de pobreza; por otro lado, los coeficientes <span class="math inline">\(\boldsymbol{\gamma}\)</span> expresan los efectos fijos sobre las covariables a nivel provincia, <span class="math inline">\(z_d\)</span>.</p>
+<p>Para este caso se asumen las distribuciones previas</p>
+<p><span class="math display">\[
+\begin{eqnarray*}
+\beta_k &amp; \sim   &amp; N(0, \tau^2_0)\\
+\gamma_d &amp;\sim &amp; N(0,\tau^2_1)
+\end{eqnarray*}
+\]</span> las cuales se toman no informativas.</p>
+<p>A continuación se muestra el proceso realizado para la obtención de la predicción de la tasa de pobreza por provincia.</p>
+</section>
+<section id="proceso-de-estimación-en-r" class="level2">
+<h2 class="anchored" data-anchor-id="proceso-de-estimación-en-r">Proceso de estimación en <code>R</code></h2>
+<p>Para desarrollar la metodología se hace uso de las siguientes librerías.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-1_bb51543df9d08d7bf9c4caaf0e90d872">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Interprete de STAN en R</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstanarm)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Manejo de bases de datos.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficas de los modelos. </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizar la presentación de las tablas</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(printr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Un conjunto de funciones desarrolladas para realizar de forma simplificada los procesos están consignadas en la siguiente rutina.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-2_1231334a4abb2d67352b37dd5e1d67e5">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"0Recursos/0Funciones/funciones_mrp.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Entre las funciones incluidas en el archivo encuentra</p>
+<ul>
+<li><p><em>plot_interaction</em>: Esta crea un diagrama de lineas donde se estudia la interacción entre las variables, en el caso de presentar un traslape de las lineas se recomienda incluir el interacción en el modelo.</p></li>
+<li><p><em>Plot_Compare</em> Puesto que es necesario realizar una homologar la información del censo y la encuesta es conveniente llevar a cabo una validación de las variables que han sido homologadas, por tanto, se espera que las proporciones resultantes del censo y la encuesta estén cercanas entre sí.</p></li>
+<li><p><em>Aux_Agregado</em>: Esta es función permite obtener estimaciones a diferentes niveles de agregación, toma mucha relevancia cuando se realiza un proceso repetitivo.</p></li>
+</ul>
+<p><strong>Las funciones están diseñada específicamente para este proceso</strong></p>
+<section id="encuesta-de-hogares" class="level3">
+<h3 class="anchored" data-anchor-id="encuesta-de-hogares">Encuesta de hogares</h3>
+<p>Los datos empleados en esta ocasión corresponden a la ultima encuesta de hogares, la cual ha sido estandarizada por <em>CEPAL</em> y se encuentra disponible en <em>BADEHOG</em></p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-3_c72ae51902d71d55785c283f4a267985">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>encuesta <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Data/encuestaPER21N.rds"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>encuesta_mrp <span class="ot">&lt;-</span> encuesta <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    depto,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">provi =</span> <span class="fu">substr</span>(ubigeo,<span class="dv">1</span>,<span class="dv">4</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pobreza =</span> <span class="fu">ifelse</span>(ingcorte <span class="sc">&lt;</span> lp,<span class="dv">1</span>,<span class="dv">0</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">area =</span> <span class="fu">case_when</span>(areageo2 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"1"</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"0"</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">sexo =</span> <span class="fu">as.character</span>(sexo),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a> <span class="at">anoest =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    edad <span class="sc">&lt;</span> <span class="dv">4</span> <span class="sc">|</span> anoest <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>   <span class="sc">~</span> <span class="st">"98"</span>  , <span class="co">#No aplica</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    anoest <span class="sc">==</span> <span class="dv">99</span> <span class="sc">~</span> <span class="st">"99"</span>, <span class="co">#NS/NR</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    anoest <span class="sc">==</span> <span class="dv">0</span>  <span class="sc">~</span> <span class="st">"1"</span>, <span class="co"># Sin educacion</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    anoest <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) <span class="sc">~</span> <span class="st">"2"</span>,       <span class="co"># 1 - 6</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    anoest <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">7</span><span class="sc">:</span><span class="dv">12</span>) <span class="sc">~</span> <span class="st">"3"</span>,      <span class="co"># 7 - 12</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    anoest <span class="sc">&gt;</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">"4"</span>,      <span class="co"># mas de 12</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Error"</span>  ),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">edad =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    edad <span class="sc">&lt;</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">"1"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    edad <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span> <span class="st">"2"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    edad <span class="sc">&lt;</span> <span class="dv">45</span> <span class="sc">~</span> <span class="st">"3"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    edad <span class="sc">&lt;</span> <span class="dv">65</span> <span class="sc">~</span> <span class="st">"4"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"5"</span>),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">etnia =</span> <span class="fu">case_when</span>(</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    etnia_ee <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"1"</span>, <span class="co"># Indigena</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    etnia_ee <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"2"</span>, <span class="co"># Negro Mulato Afroperuano</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"3"</span>), <span class="co"># Otro</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">fep =</span> <span class="st">`</span><span class="at">_fep</span><span class="st">`</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="fu">tba</span>(encuesta_mrp <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> depto </th>
+   <th style="text-align:left;"> provi </th>
+   <th style="text-align:right;"> pobreza </th>
+   <th style="text-align:left;"> area </th>
+   <th style="text-align:left;"> sexo </th>
+   <th style="text-align:left;"> anoest </th>
+   <th style="text-align:left;"> edad </th>
+   <th style="text-align:left;"> etnia </th>
+   <th style="text-align:right;"> fep </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 5 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 5 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 72.5634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 477.3727 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 477.3727 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 477.3727 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>La base de datos de la encuesta tiene la siguientes columnas:</p>
+<ul>
+<li><p><em>depto</em>: Corresponde al código asignado a la segunda división administrativa del país.</p></li>
+<li><p><em>provi</em>: Corresponde al código asignado a la tercera división administrativa del país.</p></li>
+<li><pre><code>*lp* y *li* lineas de pobreza y pobreza extrema definidas por CEPAL. </code></pre></li>
+<li><pre><code>*área* división geográfica (Urbano y Rural). </code></pre></li>
+<li><pre><code>*sexo* Hombre y Mujer. </code></pre></li>
+<li><pre><code>*etnia* En estas variable se definen tres grupos:  afrodescendientes, indígenas y Otros. </code></pre></li>
+<li><pre><code>Años de escolaridad (*anoest*) </code></pre></li>
+<li><pre><code>Rangos de edad (*edad*) </code></pre></li>
+<li><pre><code>Factor de expansión por persona (*fep*)</code></pre></li>
+</ul>
+<p>Ahora, inspeccionamos el comportamiento de la variable de interés:</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-4_e72c12e557251ce5bacd21788d615501">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> encuesta <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(pobreza) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> <span class="fu">round</span>(n<span class="sc">/</span><span class="fu">sum</span>(n),<span class="dv">2</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">pobreza =</span> <span class="fu">ifelse</span>(pobreza <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Si"</span>, <span class="st">"No"</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tab, <span class="fu">aes</span>(<span class="at">x =</span> pobreza, <span class="at">y =</span> prop)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, <span class="at">x =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(prop<span class="sc">*</span><span class="dv">100</span>,<span class="st">"%"</span>)), </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_y=</span><span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="0Recursos/4.1Modelo_unidad_pobreza_fig/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Proporción de personas por debajo de la linea de pobreza</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>La información auxiliar disponible ha sido extraída del censo e imágenes satelitales</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-5_faf39690b6400bfa41921dc5d2e36cad">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>statelevel_predictors_df <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Data/statelevel_predictors_df_provi.rds"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate_at</span>(<span class="at">.vars =</span> <span class="fu">c</span>(<span class="st">"F182013_stable_lights"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"X2016_crops.coverfraction"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"X2016_urban.coverfraction"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"X2016_gHM"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"accessibility"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"accessibility_walking_only"</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">function</span>(x) <span class="fu">scale</span>(x)<span class="sc">*</span><span class="dv">2</span><span class="sc">+</span><span class="dv">5</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tba</span>(statelevel_predictors_df  <span class="sc">%&gt;%</span>  <span class="fu">head</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> provi </th>
+   <th style="text-align:right;"> F182013_stable_lights </th>
+   <th style="text-align:right;"> X2016_crops.coverfraction </th>
+   <th style="text-align:right;"> X2016_urban.coverfraction </th>
+   <th style="text-align:right;"> X2016_gHM </th>
+   <th style="text-align:right;"> accessibility </th>
+   <th style="text-align:right;"> accessibility_walking_only </th>
+   <th style="text-align:right;"> area1 </th>
+   <th style="text-align:right;"> sexo2 </th>
+   <th style="text-align:right;"> edad2 </th>
+   <th style="text-align:right;"> edad3 </th>
+   <th style="text-align:right;"> edad4 </th>
+   <th style="text-align:right;"> edad5 </th>
+   <th style="text-align:right;"> etnia2 </th>
+   <th style="text-align:right;"> discapacidad1 </th>
+   <th style="text-align:right;"> anoest2 </th>
+   <th style="text-align:right;"> anoest3 </th>
+   <th style="text-align:right;"> anoest4 </th>
+   <th style="text-align:right;"> etnia1 </th>
+   <th style="text-align:right;"> tiene_alcantarillado </th>
+   <th style="text-align:right;"> tiene_electricidad </th>
+   <th style="text-align:right;"> tiene_acueducto </th>
+   <th style="text-align:right;"> tiene_gas </th>
+   <th style="text-align:right;"> tiene_internet </th>
+   <th style="text-align:right;"> piso_tierra </th>
+   <th style="text-align:right;"> material_paredes </th>
+   <th style="text-align:right;"> material_techo </th>
+   <th style="text-align:right;"> rezago_escolar </th>
+   <th style="text-align:right;"> alfabeta </th>
+   <th style="text-align:right;"> tasa_desocupacion </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 4.319564 </td>
+   <td style="text-align:right;"> 4.300284 </td>
+   <td style="text-align:right;"> 4.645889 </td>
+   <td style="text-align:right;"> 4.079318 </td>
+   <td style="text-align:right;"> 4.449015 </td>
+   <td style="text-align:right;"> 4.461542 </td>
+   <td style="text-align:right;"> 0.8075 </td>
+   <td style="text-align:right;"> 0.5048 </td>
+   <td style="text-align:right;"> 0.2578 </td>
+   <td style="text-align:right;"> 0.2115 </td>
+   <td style="text-align:right;"> 0.1811 </td>
+   <td style="text-align:right;"> 0.0865 </td>
+   <td style="text-align:right;"> 0.0230 </td>
+   <td style="text-align:right;"> 0.0966 </td>
+   <td style="text-align:right;"> 0.3304 </td>
+   <td style="text-align:right;"> 0.2683 </td>
+   <td style="text-align:right;"> 0.2420 </td>
+   <td style="text-align:right;"> 0.0654 </td>
+   <td style="text-align:right;"> 0.5322 </td>
+   <td style="text-align:right;"> 0.4375 </td>
+   <td style="text-align:right;"> 0.4366 </td>
+   <td style="text-align:right;"> 0.3128 </td>
+   <td style="text-align:right;"> 0.8924 </td>
+   <td style="text-align:right;"> 0.2955 </td>
+   <td style="text-align:right;"> 0.8253 </td>
+   <td style="text-align:right;"> 0.3653 </td>
+   <td style="text-align:right;"> 0.3110 </td>
+   <td style="text-align:right;"> 0.0621 </td>
+   <td style="text-align:right;"> 1e-04 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0102 </td>
+   <td style="text-align:right;"> 4.340772 </td>
+   <td style="text-align:right;"> 3.673512 </td>
+   <td style="text-align:right;"> 4.684831 </td>
+   <td style="text-align:right;"> 4.923000 </td>
+   <td style="text-align:right;"> 4.824968 </td>
+   <td style="text-align:right;"> 4.736494 </td>
+   <td style="text-align:right;"> 0.5093 </td>
+   <td style="text-align:right;"> 0.4965 </td>
+   <td style="text-align:right;"> 0.2400 </td>
+   <td style="text-align:right;"> 0.1973 </td>
+   <td style="text-align:right;"> 0.1659 </td>
+   <td style="text-align:right;"> 0.0564 </td>
+   <td style="text-align:right;"> 0.0210 </td>
+   <td style="text-align:right;"> 0.0722 </td>
+   <td style="text-align:right;"> 0.3556 </td>
+   <td style="text-align:right;"> 0.2896 </td>
+   <td style="text-align:right;"> 0.1313 </td>
+   <td style="text-align:right;"> 0.1957 </td>
+   <td style="text-align:right;"> 0.6587 </td>
+   <td style="text-align:right;"> 0.4695 </td>
+   <td style="text-align:right;"> 0.4447 </td>
+   <td style="text-align:right;"> 0.5180 </td>
+   <td style="text-align:right;"> 0.9536 </td>
+   <td style="text-align:right;"> 0.4648 </td>
+   <td style="text-align:right;"> 0.8120 </td>
+   <td style="text-align:right;"> 0.3634 </td>
+   <td style="text-align:right;"> 0.1829 </td>
+   <td style="text-align:right;"> 0.1052 </td>
+   <td style="text-align:right;"> 1e-04 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0103 </td>
+   <td style="text-align:right;"> 4.111611 </td>
+   <td style="text-align:right;"> 3.594581 </td>
+   <td style="text-align:right;"> 4.337569 </td>
+   <td style="text-align:right;"> 3.701603 </td>
+   <td style="text-align:right;"> 4.617768 </td>
+   <td style="text-align:right;"> 4.556194 </td>
+   <td style="text-align:right;"> 0.6117 </td>
+   <td style="text-align:right;"> 0.4968 </td>
+   <td style="text-align:right;"> 0.2253 </td>
+   <td style="text-align:right;"> 0.2101 </td>
+   <td style="text-align:right;"> 0.1934 </td>
+   <td style="text-align:right;"> 0.0815 </td>
+   <td style="text-align:right;"> 0.0253 </td>
+   <td style="text-align:right;"> 0.1166 </td>
+   <td style="text-align:right;"> 0.4277 </td>
+   <td style="text-align:right;"> 0.2822 </td>
+   <td style="text-align:right;"> 0.0983 </td>
+   <td style="text-align:right;"> 0.0254 </td>
+   <td style="text-align:right;"> 0.5957 </td>
+   <td style="text-align:right;"> 0.4501 </td>
+   <td style="text-align:right;"> 0.4463 </td>
+   <td style="text-align:right;"> 0.4068 </td>
+   <td style="text-align:right;"> 0.9702 </td>
+   <td style="text-align:right;"> 0.3730 </td>
+   <td style="text-align:right;"> 0.8530 </td>
+   <td style="text-align:right;"> 0.3398 </td>
+   <td style="text-align:right;"> 0.1322 </td>
+   <td style="text-align:right;"> 0.0898 </td>
+   <td style="text-align:right;"> 0e+00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0104 </td>
+   <td style="text-align:right;"> 4.045684 </td>
+   <td style="text-align:right;"> 3.453666 </td>
+   <td style="text-align:right;"> 4.338233 </td>
+   <td style="text-align:right;"> 6.700261 </td>
+   <td style="text-align:right;"> 6.112163 </td>
+   <td style="text-align:right;"> 5.965704 </td>
+   <td style="text-align:right;"> 0.1543 </td>
+   <td style="text-align:right;"> 0.5017 </td>
+   <td style="text-align:right;"> 0.2355 </td>
+   <td style="text-align:right;"> 0.1711 </td>
+   <td style="text-align:right;"> 0.0991 </td>
+   <td style="text-align:right;"> 0.0185 </td>
+   <td style="text-align:right;"> 0.0063 </td>
+   <td style="text-align:right;"> 0.0196 </td>
+   <td style="text-align:right;"> 0.4108 </td>
+   <td style="text-align:right;"> 0.2381 </td>
+   <td style="text-align:right;"> 0.0544 </td>
+   <td style="text-align:right;"> 0.5052 </td>
+   <td style="text-align:right;"> 0.9565 </td>
+   <td style="text-align:right;"> 0.8547 </td>
+   <td style="text-align:right;"> 0.8237 </td>
+   <td style="text-align:right;"> 0.8453 </td>
+   <td style="text-align:right;"> 0.9943 </td>
+   <td style="text-align:right;"> 0.5861 </td>
+   <td style="text-align:right;"> 0.9758 </td>
+   <td style="text-align:right;"> 0.8008 </td>
+   <td style="text-align:right;"> 0.1032 </td>
+   <td style="text-align:right;"> 0.1427 </td>
+   <td style="text-align:right;"> 1e-04 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0105 </td>
+   <td style="text-align:right;"> 4.113400 </td>
+   <td style="text-align:right;"> 4.795674 </td>
+   <td style="text-align:right;"> 4.456282 </td>
+   <td style="text-align:right;"> 4.599296 </td>
+   <td style="text-align:right;"> 4.461047 </td>
+   <td style="text-align:right;"> 4.481397 </td>
+   <td style="text-align:right;"> 0.4303 </td>
+   <td style="text-align:right;"> 0.4876 </td>
+   <td style="text-align:right;"> 0.2116 </td>
+   <td style="text-align:right;"> 0.1917 </td>
+   <td style="text-align:right;"> 0.1799 </td>
+   <td style="text-align:right;"> 0.0991 </td>
+   <td style="text-align:right;"> 0.0142 </td>
+   <td style="text-align:right;"> 0.1047 </td>
+   <td style="text-align:right;"> 0.4546 </td>
+   <td style="text-align:right;"> 0.2465 </td>
+   <td style="text-align:right;"> 0.0687 </td>
+   <td style="text-align:right;"> 0.0217 </td>
+   <td style="text-align:right;"> 0.6439 </td>
+   <td style="text-align:right;"> 0.3981 </td>
+   <td style="text-align:right;"> 0.4322 </td>
+   <td style="text-align:right;"> 0.5217 </td>
+   <td style="text-align:right;"> 0.9796 </td>
+   <td style="text-align:right;"> 0.5806 </td>
+   <td style="text-align:right;"> 0.9758 </td>
+   <td style="text-align:right;"> 0.3009 </td>
+   <td style="text-align:right;"> 0.0929 </td>
+   <td style="text-align:right;"> 0.1344 </td>
+   <td style="text-align:right;"> 0e+00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0106 </td>
+   <td style="text-align:right;"> 4.088941 </td>
+   <td style="text-align:right;"> 3.367801 </td>
+   <td style="text-align:right;"> 4.279733 </td>
+   <td style="text-align:right;"> 3.555281 </td>
+   <td style="text-align:right;"> 4.520254 </td>
+   <td style="text-align:right;"> 4.483412 </td>
+   <td style="text-align:right;"> 0.3225 </td>
+   <td style="text-align:right;"> 0.4790 </td>
+   <td style="text-align:right;"> 0.2053 </td>
+   <td style="text-align:right;"> 0.2050 </td>
+   <td style="text-align:right;"> 0.1851 </td>
+   <td style="text-align:right;"> 0.0902 </td>
+   <td style="text-align:right;"> 0.0218 </td>
+   <td style="text-align:right;"> 0.1014 </td>
+   <td style="text-align:right;"> 0.4793 </td>
+   <td style="text-align:right;"> 0.2349 </td>
+   <td style="text-align:right;"> 0.0847 </td>
+   <td style="text-align:right;"> 0.0142 </td>
+   <td style="text-align:right;"> 0.6401 </td>
+   <td style="text-align:right;"> 0.4267 </td>
+   <td style="text-align:right;"> 0.4567 </td>
+   <td style="text-align:right;"> 0.5891 </td>
+   <td style="text-align:right;"> 0.9788 </td>
+   <td style="text-align:right;"> 0.4559 </td>
+   <td style="text-align:right;"> 0.8709 </td>
+   <td style="text-align:right;"> 0.2656 </td>
+   <td style="text-align:right;"> 0.1135 </td>
+   <td style="text-align:right;"> 0.0872 </td>
+   <td style="text-align:right;"> 0e+00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0107 </td>
+   <td style="text-align:right;"> 4.513583 </td>
+   <td style="text-align:right;"> 5.129584 </td>
+   <td style="text-align:right;"> 4.922235 </td>
+   <td style="text-align:right;"> 5.942610 </td>
+   <td style="text-align:right;"> 4.643183 </td>
+   <td style="text-align:right;"> 4.545732 </td>
+   <td style="text-align:right;"> 0.5095 </td>
+   <td style="text-align:right;"> 0.4879 </td>
+   <td style="text-align:right;"> 0.2428 </td>
+   <td style="text-align:right;"> 0.2101 </td>
+   <td style="text-align:right;"> 0.1649 </td>
+   <td style="text-align:right;"> 0.0689 </td>
+   <td style="text-align:right;"> 0.0365 </td>
+   <td style="text-align:right;"> 0.0891 </td>
+   <td style="text-align:right;"> 0.3950 </td>
+   <td style="text-align:right;"> 0.2873 </td>
+   <td style="text-align:right;"> 0.1064 </td>
+   <td style="text-align:right;"> 0.0219 </td>
+   <td style="text-align:right;"> 0.6815 </td>
+   <td style="text-align:right;"> 0.3787 </td>
+   <td style="text-align:right;"> 0.4022 </td>
+   <td style="text-align:right;"> 0.4910 </td>
+   <td style="text-align:right;"> 0.9555 </td>
+   <td style="text-align:right;"> 0.4649 </td>
+   <td style="text-align:right;"> 0.8787 </td>
+   <td style="text-align:right;"> 0.2394 </td>
+   <td style="text-align:right;"> 0.1321 </td>
+   <td style="text-align:right;"> 0.1218 </td>
+   <td style="text-align:right;"> 1e-04 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0201 </td>
+   <td style="text-align:right;"> 5.050272 </td>
+   <td style="text-align:right;"> 4.691542 </td>
+   <td style="text-align:right;"> 5.059867 </td>
+   <td style="text-align:right;"> 4.076027 </td>
+   <td style="text-align:right;"> 4.428592 </td>
+   <td style="text-align:right;"> 4.439321 </td>
+   <td style="text-align:right;"> 0.7881 </td>
+   <td style="text-align:right;"> 0.5069 </td>
+   <td style="text-align:right;"> 0.2606 </td>
+   <td style="text-align:right;"> 0.2201 </td>
+   <td style="text-align:right;"> 0.1764 </td>
+   <td style="text-align:right;"> 0.0855 </td>
+   <td style="text-align:right;"> 0.0011 </td>
+   <td style="text-align:right;"> 0.1030 </td>
+   <td style="text-align:right;"> 0.2408 </td>
+   <td style="text-align:right;"> 0.2931 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.4472 </td>
+   <td style="text-align:right;"> 0.4431 </td>
+   <td style="text-align:right;"> 0.3496 </td>
+   <td style="text-align:right;"> 0.3304 </td>
+   <td style="text-align:right;"> 0.3475 </td>
+   <td style="text-align:right;"> 0.7439 </td>
+   <td style="text-align:right;"> 0.2657 </td>
+   <td style="text-align:right;"> 0.6684 </td>
+   <td style="text-align:right;"> 0.2896 </td>
+   <td style="text-align:right;"> 0.3701 </td>
+   <td style="text-align:right;"> 0.0853 </td>
+   <td style="text-align:right;"> 3e-04 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0202 </td>
+   <td style="text-align:right;"> 4.091090 </td>
+   <td style="text-align:right;"> 3.457121 </td>
+   <td style="text-align:right;"> 4.211490 </td>
+   <td style="text-align:right;"> 2.626857 </td>
+   <td style="text-align:right;"> 4.415799 </td>
+   <td style="text-align:right;"> 4.419339 </td>
+   <td style="text-align:right;"> 0.3455 </td>
+   <td style="text-align:right;"> 0.4862 </td>
+   <td style="text-align:right;"> 0.1865 </td>
+   <td style="text-align:right;"> 0.1869 </td>
+   <td style="text-align:right;"> 0.2076 </td>
+   <td style="text-align:right;"> 0.1387 </td>
+   <td style="text-align:right;"> 0.0006 </td>
+   <td style="text-align:right;"> 0.0929 </td>
+   <td style="text-align:right;"> 0.3787 </td>
+   <td style="text-align:right;"> 0.3122 </td>
+   <td style="text-align:right;"> 0.1257 </td>
+   <td style="text-align:right;"> 0.3152 </td>
+   <td style="text-align:right;"> 0.7425 </td>
+   <td style="text-align:right;"> 0.5399 </td>
+   <td style="text-align:right;"> 0.5504 </td>
+   <td style="text-align:right;"> 0.7635 </td>
+   <td style="text-align:right;"> 0.9688 </td>
+   <td style="text-align:right;"> 0.5173 </td>
+   <td style="text-align:right;"> 0.9952 </td>
+   <td style="text-align:right;"> 0.4682 </td>
+   <td style="text-align:right;"> 0.1605 </td>
+   <td style="text-align:right;"> 0.0818 </td>
+   <td style="text-align:right;"> 0e+00 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0203 </td>
+   <td style="text-align:right;"> 4.069136 </td>
+   <td style="text-align:right;"> 3.792419 </td>
+   <td style="text-align:right;"> 4.263211 </td>
+   <td style="text-align:right;"> 2.669800 </td>
+   <td style="text-align:right;"> 4.411358 </td>
+   <td style="text-align:right;"> 4.411632 </td>
+   <td style="text-align:right;"> 0.3890 </td>
+   <td style="text-align:right;"> 0.5068 </td>
+   <td style="text-align:right;"> 0.1826 </td>
+   <td style="text-align:right;"> 0.1728 </td>
+   <td style="text-align:right;"> 0.1779 </td>
+   <td style="text-align:right;"> 0.1161 </td>
+   <td style="text-align:right;"> 0.0011 </td>
+   <td style="text-align:right;"> 0.0960 </td>
+   <td style="text-align:right;"> 0.3481 </td>
+   <td style="text-align:right;"> 0.3060 </td>
+   <td style="text-align:right;"> 0.0901 </td>
+   <td style="text-align:right;"> 0.4715 </td>
+   <td style="text-align:right;"> 0.7802 </td>
+   <td style="text-align:right;"> 0.5263 </td>
+   <td style="text-align:right;"> 0.4708 </td>
+   <td style="text-align:right;"> 0.8030 </td>
+   <td style="text-align:right;"> 0.9924 </td>
+   <td style="text-align:right;"> 0.5274 </td>
+   <td style="text-align:right;"> 0.9851 </td>
+   <td style="text-align:right;"> 0.4590 </td>
+   <td style="text-align:right;"> 0.1321 </td>
+   <td style="text-align:right;"> 0.1824 </td>
+   <td style="text-align:right;"> 0e+00 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+<section id="niveles-de-agregación-para-colapsar-la-encuesta" class="level3">
+<h3 class="anchored" data-anchor-id="niveles-de-agregación-para-colapsar-la-encuesta">Niveles de agregación para colapsar la encuesta</h3>
+<p>Después de realizar una investigación en la literatura especializada y realizar estudios de simulación fue posible evidenciar que las predicciones obtenidas con la muestra sin agregar y la muestra agregada convergen a la media del dominio.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-6_ffd625a929a614e1ee0b2ac66f08ae56">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>byAgrega <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"depto"</span>, <span class="st">"provi"</span>,  <span class="st">"area"</span>, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">"sexo"</span>,   <span class="st">"anoest"</span>, <span class="st">"edad"</span>,   <span class="st">"etnia"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="creando-base-con-la-encuesta-agregada" class="level3">
+<h3 class="anchored" data-anchor-id="creando-base-con-la-encuesta-agregada">Creando base con la encuesta agregada</h3>
+<p>El resultado de agregar la base de dato se muestra a continuación:</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-7_5515330aaf88bb1989f8b9e59806dff6">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>encuesta_df_agg <span class="ot">&lt;-</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  encuesta_mrp <span class="sc">%&gt;%</span>                    <span class="co"># Encuesta  </span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by_at</span>(<span class="fu">all_of</span>(byAgrega)) <span class="sc">%&gt;%</span>   <span class="co"># Agrupar por el listado de variables</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),                  <span class="co"># Número de observaciones</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># conteo de personas con características similares.           </span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">pobreza =</span> <span class="fu">sum</span>(pobreza),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">no_pobreza =</span> n<span class="sc">-</span>pobreza,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span>     </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(pobreza))                    <span class="co"># Ordenar la base.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>La tabla obtenida es la siguiente:</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-8_095cb693712fa8f10cbff7d325e56846">
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> depto </th>
+   <th style="text-align:left;"> provi </th>
+   <th style="text-align:left;"> area </th>
+   <th style="text-align:left;"> sexo </th>
+   <th style="text-align:left;"> anoest </th>
+   <th style="text-align:left;"> edad </th>
+   <th style="text-align:left;"> etnia </th>
+   <th style="text-align:right;"> n </th>
+   <th style="text-align:right;"> pobreza </th>
+   <th style="text-align:right;"> no_pobreza </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 604 </td>
+   <td style="text-align:right;"> 92 </td>
+   <td style="text-align:right;"> 512 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 550 </td>
+   <td style="text-align:right;"> 86 </td>
+   <td style="text-align:right;"> 464 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 454 </td>
+   <td style="text-align:right;"> 85 </td>
+   <td style="text-align:right;"> 369 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 410 </td>
+   <td style="text-align:right;"> 82 </td>
+   <td style="text-align:right;"> 328 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 381 </td>
+   <td style="text-align:right;"> 72 </td>
+   <td style="text-align:right;"> 309 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 376 </td>
+   <td style="text-align:right;"> 71 </td>
+   <td style="text-align:right;"> 305 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 250 </td>
+   <td style="text-align:right;"> 62 </td>
+   <td style="text-align:right;"> 188 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 205 </td>
+   <td style="text-align:right;"> 53 </td>
+   <td style="text-align:right;"> 152 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 07 </td>
+   <td style="text-align:left;"> 0701 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 181 </td>
+   <td style="text-align:right;"> 48 </td>
+   <td style="text-align:right;"> 133 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 431 </td>
+   <td style="text-align:right;"> 47 </td>
+   <td style="text-align:right;"> 384 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>El paso a seguir es unificar las tablas creadas.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-9_363a6284bdd8c3805d610ba15e47aaa4">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>encuesta_df_agg <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(encuesta_df_agg, statelevel_predictors_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="definiendo-el-modelo-multinivel." class="level3">
+<h3 class="anchored" data-anchor-id="definiendo-el-modelo-multinivel.">Definiendo el modelo multinivel.</h3>
+<p>Después de haber ordenado la encuesta, podemos pasar a la definición del modelo.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-10_95d86b0117de78ad0c12432ce5767d86">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>()) <span class="co"># Permite procesar en paralelo. </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">stan_glmer</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(pobreza, no_pobreza) <span class="sc">~</span>                              </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span> <span class="sc">|</span> provi) <span class="sc">+</span>                          <span class="co"># Efecto aleatorio (ud)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    edad <span class="sc">+</span>                               <span class="co"># Efecto fijo (Variables X)</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    sexo  <span class="sc">+</span> </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    tasa_desocupacion <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    F182013_stable_lights <span class="sc">+</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    X2016_crops.coverfraction <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    X2016_urban.coverfraction ,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">weights =</span> n,            <span class="co"># Número de observaciones. </span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> encuesta_df_agg, <span class="co"># Encuesta agregada </span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">verbose =</span> <span class="cn">TRUE</span>,         <span class="co"># Muestre el avance del proceso</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">chains =</span> <span class="dv">4</span>,             <span class="co"># Número de cadenas.</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">iter =</span> <span class="dv">500</span>,              <span class="co"># Número de realizaciones de la cadena</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">cores =</span> <span class="dv">4</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>                )</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(fit, <span class="at">file =</span> <span class="st">"../Data/fit_pobreza.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Después de esperar un tiempo prudente se obtiene el siguiente modelo.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-11_bf31e68d34e1713bfa962a91f15724e7">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Data/fit_pobreza.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-12_0c414434d4ad5c9fee6076fd86405efb">
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:right;"> (Intercept) </th>
+   <th style="text-align:right;"> edad2 </th>
+   <th style="text-align:right;"> edad3 </th>
+   <th style="text-align:right;"> edad4 </th>
+   <th style="text-align:right;"> edad5 </th>
+   <th style="text-align:right;"> sexo2 </th>
+   <th style="text-align:right;"> tasa_desocupacion </th>
+   <th style="text-align:right;"> F182013_stable_lights </th>
+   <th style="text-align:right;"> X2016_crops.coverfraction </th>
+   <th style="text-align:right;"> X2016_urban.coverfraction </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 2.4636 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0102 </td>
+   <td style="text-align:right;"> 2.2947 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0103 </td>
+   <td style="text-align:right;"> 2.4618 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0104 </td>
+   <td style="text-align:right;"> 2.8319 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0105 </td>
+   <td style="text-align:right;"> 2.0392 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0106 </td>
+   <td style="text-align:right;"> 2.9322 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0107 </td>
+   <td style="text-align:right;"> 2.7282 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0201 </td>
+   <td style="text-align:right;"> 2.5094 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0202 </td>
+   <td style="text-align:right;"> 2.5431 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0203 </td>
+   <td style="text-align:right;"> 2.3911 </td>
+   <td style="text-align:right;"> -0.7175 </td>
+   <td style="text-align:right;"> -0.6593 </td>
+   <td style="text-align:right;"> -1.1791 </td>
+   <td style="text-align:right;"> -1.0034 </td>
+   <td style="text-align:right;"> 0.0442 </td>
+   <td style="text-align:right;"> 900.3911 </td>
+   <td style="text-align:right;"> -0.3462 </td>
+   <td style="text-align:right;"> 0.0508 </td>
+   <td style="text-align:right;"> -0.057 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+</section>
+<section id="proceso-de-estimación-y-predicción" class="level1">
+<h1>Proceso de estimación y predicción</h1>
+<p>Obtener el modelo es solo un paso más, ahora se debe realizar la predicción en el censo, el cual fue estandarizado y homologado con la encuesta previamente.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-13_00af702dd91cb6e8a9e1a2d960214893">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>poststrat_df <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../Data/censo_provi.rds"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">left_join</span>(statelevel_predictors_df) </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tba</span>( poststrat_df <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> provi </th>
+   <th style="text-align:left;"> area </th>
+   <th style="text-align:left;"> sexo </th>
+   <th style="text-align:left;"> edad </th>
+   <th style="text-align:left;"> etnia </th>
+   <th style="text-align:left;"> discapacidad </th>
+   <th style="text-align:left;"> anoest </th>
+   <th style="text-align:right;"> n </th>
+   <th style="text-align:right;"> F182013_stable_lights </th>
+   <th style="text-align:right;"> X2016_crops.coverfraction </th>
+   <th style="text-align:right;"> X2016_urban.coverfraction </th>
+   <th style="text-align:right;"> X2016_gHM </th>
+   <th style="text-align:right;"> accessibility </th>
+   <th style="text-align:right;"> accessibility_walking_only </th>
+   <th style="text-align:right;"> area1 </th>
+   <th style="text-align:right;"> sexo2 </th>
+   <th style="text-align:right;"> edad2 </th>
+   <th style="text-align:right;"> edad3 </th>
+   <th style="text-align:right;"> edad4 </th>
+   <th style="text-align:right;"> edad5 </th>
+   <th style="text-align:right;"> etnia2 </th>
+   <th style="text-align:right;"> discapacidad1 </th>
+   <th style="text-align:right;"> anoest2 </th>
+   <th style="text-align:right;"> anoest3 </th>
+   <th style="text-align:right;"> anoest4 </th>
+   <th style="text-align:right;"> etnia1 </th>
+   <th style="text-align:right;"> tiene_alcantarillado </th>
+   <th style="text-align:right;"> tiene_electricidad </th>
+   <th style="text-align:right;"> tiene_acueducto </th>
+   <th style="text-align:right;"> tiene_gas </th>
+   <th style="text-align:right;"> tiene_internet </th>
+   <th style="text-align:right;"> piso_tierra </th>
+   <th style="text-align:right;"> material_paredes </th>
+   <th style="text-align:right;"> material_techo </th>
+   <th style="text-align:right;"> rezago_escolar </th>
+   <th style="text-align:right;"> alfabeta </th>
+   <th style="text-align:right;"> tasa_desocupacion </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 477182 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:right;"> 442567 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:right;"> 430573 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 424527 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:right;"> 395494 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 4 </td>
+   <td style="text-align:right;"> 393264 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:right;"> 362646 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:right;"> 352450 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 339789 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1501 </td>
+   <td style="text-align:left;"> 1 </td>
+   <td style="text-align:left;"> 2 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:left;"> 0 </td>
+   <td style="text-align:left;"> 3 </td>
+   <td style="text-align:right;"> 314822 </td>
+   <td style="text-align:right;"> 27.55846 </td>
+   <td style="text-align:right;"> 3.48218 </td>
+   <td style="text-align:right;"> 30.74082 </td>
+   <td style="text-align:right;"> 7.041061 </td>
+   <td style="text-align:right;"> 4.416319 </td>
+   <td style="text-align:right;"> 4.416325 </td>
+   <td style="text-align:right;"> 0.9992 </td>
+   <td style="text-align:right;"> 0.5103 </td>
+   <td style="text-align:right;"> 0.2609 </td>
+   <td style="text-align:right;"> 0.2339 </td>
+   <td style="text-align:right;"> 0.1979 </td>
+   <td style="text-align:right;"> 0.0858 </td>
+   <td style="text-align:right;"> 0.0226 </td>
+   <td style="text-align:right;"> 0.1086 </td>
+   <td style="text-align:right;"> 0.1665 </td>
+   <td style="text-align:right;"> 0.3717 </td>
+   <td style="text-align:right;"> 0.3457 </td>
+   <td style="text-align:right;"> 0.1419 </td>
+   <td style="text-align:right;"> 0.2553 </td>
+   <td style="text-align:right;"> 0.2008 </td>
+   <td style="text-align:right;"> 0.264 </td>
+   <td style="text-align:right;"> 0.221 </td>
+   <td style="text-align:right;"> 0.5036 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 0.2877 </td>
+   <td style="text-align:right;"> 0.1897 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.0168 </td>
+   <td style="text-align:right;"> 0.0167 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>Note que la información del censo esta agregada.</p>
+<section id="distribución-posterior." class="level3">
+<h3 class="anchored" data-anchor-id="distribución-posterior.">Distribución posterior.</h3>
+<p>Para obtener una distribución posterior de cada observación se hace uso de la función <em>posterior_epred</em> de la siguiente forma.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-14_00dc14408139ce817022cf5c1dd8720d">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>epred_mat <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(fit, <span class="at">newdata =</span> poststrat_df, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(epred_mat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]   200 68909</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(poststrat_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68909    37</code></pre>
+</div>
+</div>
+<p>Por ser una predicción en post-estrato no observados, es posible obtener valores negativos de la variable, los cuales deben ser ajustados de forma manual.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-15_e3dccfe3c2d1aa793b6c45529fec747f">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## validación de los valores posteriores</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">as.numeric</span>(epred_mat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="0Recursos/4.1Modelo_unidad_pobreza_fig/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="estimación-de-la-tasa-de-pobreza" class="level2">
+<h2 class="anchored" data-anchor-id="estimación-de-la-tasa-de-pobreza">Estimación de la tasa de pobreza</h2>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-16_acaaab5862d2f254373727211e8ebbdd">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>n_filtered <span class="ot">&lt;-</span> poststrat_df<span class="sc">$</span>n</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>mrp_estimates <span class="ot">&lt;-</span> epred_mat <span class="sc">%*%</span> n_filtered <span class="sc">/</span> <span class="fu">sum</span>(n_filtered)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>(temp_ing <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrp_estimate =</span> <span class="fu">mean</span>(mrp_estimates),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrp_estimate_se =</span> <span class="fu">sd</span>(mrp_estimates)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+mrp_estimate
+</th>
+<th style="text-align:right;">
+mrp_estimate_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.2109158
+</td>
+<td style="text-align:right;">
+0.0545727
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+</div>
+<p>El resultado nos indica que el ingreso medio nacional es 0.21 lineas de pobreza</p>
+<section id="estimación-para-el-depto-01." class="level3">
+<h3 class="anchored" data-anchor-id="estimación-para-el-depto-01.">Estimación para el depto == “01”.</h3>
+<p>Es importante siempre conservar el orden de la base, dado que relación entre la predicción y el censo en uno a uno.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-17_b2e99ed3498fc2491a6b5c1afaa09dd0">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> poststrat_df <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">depto =</span> <span class="fu">str_sub</span>(provi, <span class="dv">1</span>,<span class="dv">2</span>), <span class="at">Posi =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">filter</span>(temp, depto <span class="sc">==</span> <span class="st">"01"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(n, Posi)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>n_filtered <span class="ot">&lt;-</span> temp<span class="sc">$</span>n</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>temp_epred_mat <span class="ot">&lt;-</span> epred_mat[, temp<span class="sc">$</span>Posi]</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimando el CME</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>mrp_estimates <span class="ot">&lt;-</span> temp_epred_mat <span class="sc">%*%</span> n_filtered <span class="sc">/</span> <span class="fu">sum</span>(n_filtered)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>(temp_ing <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrp_estimate =</span> <span class="fu">mean</span>(mrp_estimates),</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrp_estimate_se =</span> <span class="fu">sd</span>(mrp_estimates)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+mrp_estimate
+</th>
+<th style="text-align:right;">
+mrp_estimate_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.3418372
+</td>
+<td style="text-align:right;">
+0.1333228
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+</div>
+<p>El resultado nos indica que la tasa de pobreza en el departamento 01 es 0.34</p>
+</section>
+<section id="estimación-para-la-provi-0101" class="level3">
+<h3 class="anchored" data-anchor-id="estimación-para-la-provi-0101">Estimación para la provi == “0101”</h3>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-18_00d2c9e4d1241fc0fa247bc2572cf04e">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> poststrat_df <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">Posi =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(temp, provi <span class="sc">==</span> <span class="st">"0101"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(n, Posi)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>n_filtered <span class="ot">&lt;-</span> temp<span class="sc">$</span>n</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>temp_epred_mat <span class="ot">&lt;-</span> epred_mat[, temp<span class="sc">$</span>Posi]</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimando el CME</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>mrp_estimates <span class="ot">&lt;-</span> temp_epred_mat <span class="sc">%*%</span> n_filtered <span class="sc">/</span> <span class="fu">sum</span>(n_filtered)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>(temp_ing <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrp_estimate =</span> <span class="fu">mean</span>(mrp_estimates),</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">mrp_estimate_se =</span> <span class="fu">sd</span>(mrp_estimates)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+mrp_estimate
+</th>
+<th style="text-align:right;">
+mrp_estimate_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.2709757
+</td>
+<td style="text-align:right;">
+0.1339776
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+</div>
+<p>El resultado nos indica que la tasa de pobreza en la provincia 0101 es 0.27</p>
+<p>Después de comprender la forma en que se realiza la estimación de los dominios no observados procedemos el uso de la función <em>Aux_Agregado</em> que es desarrollada para este fin.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-19_919679e831db3201255d07cab201682a">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>(mrp_estimate_Ingresolp <span class="ot">&lt;-</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Aux_Agregado</span>(<span class="at">poststrat =</span> poststrat_df,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">epredmat =</span> epred_mat,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">byMap =</span> <span class="cn">NULL</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Nacional
+</th>
+<th style="text-align:right;">
+mrp_estimate
+</th>
+<th style="text-align:right;">
+mrp_estimate_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Nacional
+</td>
+<td style="text-align:right;">
+0.2109158
+</td>
+<td style="text-align:right;">
+0.0545727
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+</div>
+<p>De forma similar es posible obtener los resultados para departamento y provincia.</p>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-20_c867d5508dcad1bbb1e13d005c271b34">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mrp_estimate_depto <span class="ot">&lt;-</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Aux_Agregado</span>(<span class="at">poststrat =</span> poststrat_df <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">mutate</span>(<span class="at">depto =</span> <span class="fu">str_sub</span>(provi, <span class="dv">1</span>,<span class="dv">2</span>)),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">epredmat =</span> epred_mat,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">byMap =</span> <span class="st">"depto"</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tba</span>(mrp_estimate_depto, <span class="at">cap =</span> <span class="st">"24 departamentos y 1 provincia constitucional"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>24 departamentos y 1 provincia constitucional</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> depto </th>
+   <th style="text-align:right;"> mrp_estimate </th>
+   <th style="text-align:right;"> mrp_estimate_se </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 01 </td>
+   <td style="text-align:right;"> 0.3418 </td>
+   <td style="text-align:right;"> 0.1333 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 02 </td>
+   <td style="text-align:right;"> 0.2729 </td>
+   <td style="text-align:right;"> 0.1169 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 03 </td>
+   <td style="text-align:right;"> 0.3029 </td>
+   <td style="text-align:right;"> 0.0934 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 04 </td>
+   <td style="text-align:right;"> 0.0974 </td>
+   <td style="text-align:right;"> 0.0311 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 05 </td>
+   <td style="text-align:right;"> 0.2880 </td>
+   <td style="text-align:right;"> 0.0860 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 06 </td>
+   <td style="text-align:right;"> 0.3002 </td>
+   <td style="text-align:right;"> 0.1023 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 07 </td>
+   <td style="text-align:right;"> 0.3434 </td>
+   <td style="text-align:right;"> 0.1874 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 08 </td>
+   <td style="text-align:right;"> 0.3015 </td>
+   <td style="text-align:right;"> 0.1092 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 09 </td>
+   <td style="text-align:right;"> 0.2302 </td>
+   <td style="text-align:right;"> 0.0807 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 10 </td>
+   <td style="text-align:right;"> 0.2905 </td>
+   <td style="text-align:right;"> 0.0953 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 11 </td>
+   <td style="text-align:right;"> 0.1502 </td>
+   <td style="text-align:right;"> 0.0621 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 12 </td>
+   <td style="text-align:right;"> 0.2098 </td>
+   <td style="text-align:right;"> 0.0565 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 13 </td>
+   <td style="text-align:right;"> 0.1946 </td>
+   <td style="text-align:right;"> 0.0555 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 14 </td>
+   <td style="text-align:right;"> 0.2634 </td>
+   <td style="text-align:right;"> 0.1171 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 15 </td>
+   <td style="text-align:right;"> 0.1268 </td>
+   <td style="text-align:right;"> 0.0057 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 16 </td>
+   <td style="text-align:right;"> 0.3255 </td>
+   <td style="text-align:right;"> 0.1328 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 17 </td>
+   <td style="text-align:right;"> 0.2501 </td>
+   <td style="text-align:right;"> 0.1167 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 18 </td>
+   <td style="text-align:right;"> 0.1811 </td>
+   <td style="text-align:right;"> 0.0732 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 19 </td>
+   <td style="text-align:right;"> 0.2516 </td>
+   <td style="text-align:right;"> 0.0798 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 20 </td>
+   <td style="text-align:right;"> 0.2248 </td>
+   <td style="text-align:right;"> 0.0778 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 21 </td>
+   <td style="text-align:right;"> 0.3397 </td>
+   <td style="text-align:right;"> 0.1463 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 22 </td>
+   <td style="text-align:right;"> 0.3096 </td>
+   <td style="text-align:right;"> 0.1463 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 23 </td>
+   <td style="text-align:right;"> 0.1365 </td>
+   <td style="text-align:right;"> 0.0982 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 24 </td>
+   <td style="text-align:right;"> 0.2868 </td>
+   <td style="text-align:right;"> 0.1496 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 25 </td>
+   <td style="text-align:right;"> 0.1963 </td>
+   <td style="text-align:right;"> 0.0936 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-21_8937d4de806fcb2c352e5f513605d4b6">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>mrp_estimate_provi <span class="ot">&lt;-</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Aux_Agregado</span>(<span class="at">poststrat =</span> poststrat_df,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">epredmat =</span> epred_mat,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">byMap =</span> <span class="st">"provi"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tba</span>(mrp_estimate_provi <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class="table table-striped lightable-classic" style="width: auto !important; margin-left: auto; margin-right: auto; font-family: Arial Narrow; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> provi </th>
+   <th style="text-align:right;"> mrp_estimate </th>
+   <th style="text-align:right;"> mrp_estimate_se </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 0101 </td>
+   <td style="text-align:right;"> 0.2710 </td>
+   <td style="text-align:right;"> 0.1340 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0102 </td>
+   <td style="text-align:right;"> 0.3497 </td>
+   <td style="text-align:right;"> 0.1972 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0103 </td>
+   <td style="text-align:right;"> 0.3795 </td>
+   <td style="text-align:right;"> 0.2272 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0104 </td>
+   <td style="text-align:right;"> 0.4637 </td>
+   <td style="text-align:right;"> 0.2265 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0105 </td>
+   <td style="text-align:right;"> 0.2329 </td>
+   <td style="text-align:right;"> 0.1045 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0106 </td>
+   <td style="text-align:right;"> 0.4587 </td>
+   <td style="text-align:right;"> 0.2183 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0107 </td>
+   <td style="text-align:right;"> 0.3250 </td>
+   <td style="text-align:right;"> 0.1663 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0201 </td>
+   <td style="text-align:right;"> 0.4137 </td>
+   <td style="text-align:right;"> 0.2460 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0202 </td>
+   <td style="text-align:right;"> 0.3899 </td>
+   <td style="text-align:right;"> 0.2153 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 0203 </td>
+   <td style="text-align:right;"> 0.3092 </td>
+   <td style="text-align:right;"> 0.1899 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</section>
+</section>
+<section id="algunos-mapas-resultantes" class="level2">
+<h2 class="anchored" data-anchor-id="algunos-mapas-resultantes">Algunos mapas resultantes</h2>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-22_74d65b3d4e3038f40c527de13b81a9a8">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="0Recursos/4.1Modelo_unidad_pobreza_fig/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Tasa de pobreza por provincia</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="0Recursos/4.1Modelo_unidad_pobreza/unnamed-chunk-23_5d23d92484228fe3cb028324d735a031">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="0Recursos/4.1Modelo_unidad_pobreza_fig/unnamed-chunk-23-1.png" style="height:300.0%" width="672" class="figure-img"></p>
+<p></p><figcaption class="figure-caption">Tasa de pobreza por provincia, sexo y edad</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
