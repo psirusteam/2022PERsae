@@ -1,5 +1,5 @@
 ---
-title: "Fay Herriot en R y STAN"
+title: "Función Generalizada de Varianza (FGV)"
 subtitle: "CEPAL - División de Estadísticas Sociales"
 author: "Andrés Gutiérrez - Stalyn Guerrero"
 format: html
@@ -30,8 +30,6 @@ tba <- function(dat, cap = NA){
 
 ```
 
-## Transformaciones FGV 
-
 Uno de los insumos más importantes en el modelo de áreas es la 
 varianza del estimador directo, a nivel de dominio, la cual no puede calcularse de ningún modo. En correspondencia, este valor debe estimarse desde los datos recolectados en cada dominio. Sin embargo, 
 en dominios en las que se cuenta con un tamaño de muestra muy pequeño, estas estimaciones no tendrán un buen comportamiento. Por ende, es muy útil utilizar un modelo de **suavizamiento** de las varianzas para 
@@ -43,8 +41,6 @@ Hidiroglou (2019) afirma que $E_{mp}\left(\hat{\theta}^{dir}_d\right)=\boldsymbo
 
 -   $p$ hacer referencia a la medida de probabilidad inducida por el diseño de muestreo complejo que 
 induce las estimaciones directas. 
-
-<!-- Además, $\tilde{\psi}^2_{d} = E_m\left(\tilde{\psi}^2_{d}\right)$ es la varianza suavizada del estimador directo $\hat{\theta}^{dir}_d$.   -->
 
 La solución que acá se plantea se conoce con el nombre de Función Generalizada de Varianza, la cual consiste en ajustar un modelo log-lineal a la varianza directa estimada. Partiendo del hecho de que
 se tiene acceso a un estimador insesgado de $\psi^2$, denotado por $\hat{\psi}^2$ se tiene que:
@@ -273,6 +269,7 @@ base_sae$hat_var[base_sae$vardir == 0 & !is.na(base_sae$vardir)] <-
   delta.hat * exp(prediccion_ln_0)
 ```
 
+Organizando la información para exportar, realizamos validaciones adicionales sobre el deff
 
 ```{r}
 base_FH <- base_sae %>%

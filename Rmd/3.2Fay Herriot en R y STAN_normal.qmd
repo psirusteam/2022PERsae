@@ -298,6 +298,8 @@ data_syn <- data_syn %>%
          pred_EE = theta_FH_pred$sd,
          Cv_pred = pred_EE/pred)
 
+tba(data_syn %>% 
+      select(provi, pobreza, pred, pred_EE, Cv_pred ))
 
 ```
 
@@ -307,6 +309,10 @@ data_syn <- data_syn %>%
 library(sp)
 library(sf)
 library(tmap)
+
+data_syn %<>% mutate(
+  pred = ifelse(pred < 0, 0,pred),
+  Cv_pred = ifelse(Cv_pred < 0, 0,Cv_pred)) 
 
 data_map <- rbind(data_dir, data_syn) %>% 
   select(provi, pobreza, pred, pred_EE, Cv_pred ) 
