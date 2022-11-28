@@ -44,8 +44,43 @@ Hidiroglou (2019) afirma que $E_{mp}\left(\hat{\theta}^{dir}_d\right)=\boldsymbo
 -   $p$ hacer referencia a la medida de probabilidad inducida por el diseño de muestreo complejo que 
 induce las estimaciones directas. 
 
-Además, $\tilde{\psi}^2_{d} = E_m\left(\tilde{\psi}^2_{d}\right)$ es la varianza suavizada del estimador directo $\hat{\theta}^{dir}_d$.  
+<!-- Además, $\tilde{\psi}^2_{d} = E_m\left(\tilde{\psi}^2_{d}\right)$ es la varianza suavizada del estimador directo $\hat{\theta}^{dir}_d$.   -->
 
+La solución que acá se plantea se conoce con el nombre de Función Generalizada de Varianza, la cual consiste en ajustar un modelo log-lineal a la varianza directa estimada. Partiendo del hecho de que
+se tiene acceso a un estimador insesgado de $\psi^2$, denotado por $\hat{\psi}^2$ se tiene que:
+$$
+E_{mp}\left(\hat{\psi}_{d}^{2}\right)=E_{m}\left(E_{p}\left(\psi_{d}^{2}\right)\right)=E_{m}\left(\psi_{d}^{2}\right)=\tilde{\psi}_{d}^{2}
+$$
+
+La anterior igualdad puede interpretarse como que un estimador insesgado y simple de $\tilde{\psi}_{d}^{2}$ puede ser $\hat{\psi}_{d}^{2}$. Sin embargo, este estimador de muestreo es inestable cuando el tamaño de muestra es pequeño, que es justo el paradigma dominante en la estimación de áreas pequeñas. Rivest and Belmonte (2000) consideran modelos de suavizamiento para la estimación de las varianzas directas definidos de la siguiente manera:
+
+$$
+\log\left(\hat{\psi}_{d}^{2}\right)=\boldsymbol{z}_{d}^{t}\boldsymbol{\alpha}+\boldsymbol{\varepsilon}_{d}
+$$
+
+En donde $\boldsymbol{z}_{d}$ es un vector de covariables explicativas que son funciones de $\boldsymbol{x}_{d}$, $\boldsymbol{\alpha}$ es un vector de parámetros que deben ser estimados, $\boldsymbol{\varepsilon}_{d}$ son errores aleatorios con media cero y varianza constante, que se asumen idénticamente distribuidos condicionalmente sobre $\boldsymbol{z}_{d}$. Del anterior modelo, la
+estimación suavizada de la varianza de muestreo está dada por:
+$$
+\tilde{\psi}_{d}^{2}=E_{mp}\left(\psi_{d}^{2}\right)=\exp\left(\boldsymbol{z}_{d}^{t}\boldsymbol{\alpha}\right)\times\Delta
+$$
+
+En donde, $E_{mp}\left(\varepsilon_{d}\right)=\Delta$. No hay necesidad de especificar una distribución paramétrica para los
+errores de este modelo. Al utilizar el método de los momentos, se tiene el siguiente estimador insesgado para $\Delta$: 
+$$
+\hat{\Delta}=\frac{\sum_{d=1}^{D}\hat{\psi}_{d}^{2}}{\sum_{d=1}^{D}\exp\left(\boldsymbol{z}_{d}^{t}\boldsymbol{\alpha}\right)}
+$$
+
+De la misma forma, al utilizar los procedimientos estándar en una regresión lineal, la estimación del coeficiente de parámetros de regresión está dada por la siguiente expresión:
+
+$$
+\hat{\boldsymbol{\alpha}}=\left(\sum_{d=1}^{D}\boldsymbol{z}_{d}\boldsymbol{z}_{d}^{t}\right)^{-1}\sum_{d=1}^{D}\boldsymbol{z}_{d}\log\left(\hat{\psi}_{d}^{2}\right)
+$$
+
+Por último, el estimador suavizado de la varianza muestral está definido por:
+
+$$
+\hat{\tilde{\psi}}_{d}^{2}=\exp\left(\boldsymbol{z}_{d}^{t}\hat{\boldsymbol{\alpha}}\right)\hat{\Delta}
+$$
 
 ## Datos de la encuesta
 
@@ -76,7 +111,7 @@ encuesta <- readRDS("../Data/encuestaPER21N.rds") %>%
 tba(encuesta %>% head(10))
 ```
 
-Definir el diseño muestral
+Definir el diseño muestral haciendo uso de las librerias `srvyr` y `survey`
 
 ```{r}
 library(survey)
@@ -94,7 +129,7 @@ diseno <-
 
 ```
 
-Para la estimación directa de la proporción se emplea la función `direct.supr`, dando como resultado.
+Para la estimación directa de la proporción se emplea la función `direct.supr`, disponible en el archivo `0Source_FH.R`, dando como resultado.
 
 ```{r}
 directoprovi <- direct.supr(design.base = diseno,
@@ -106,34 +141,34 @@ directoprovi <- direct.supr(design.base = diseno,
 directoprovi %>%
   group_by(Flag) %>%
   summarise(n = n()) %>% 
-  arrange(n)
+  arrange(n) %>% tba()
 ```
 
-# Transformación Arcoseno, calculo del DEFF y varianza zd 
+Para los dominios que no son excluidos se hace la transformación arcoseno, calculo del *DEFF* y varianza 
 
 ```{r}
-base_sae <- directoprovi %>% filter(Flag != "Excluir") %>%
+base_sae <- directoprovi %>% 
+  filter(Flag != "Excluir") %>%
   transmute(
-    provi = provi,
-    nd = n,
-    n_effec = n.eff,
-    pobreza = p,
-    pobreza_T = asin(sqrt(pobreza)),
-    vardir = ee ^ 2,
-    cv = CV,
-    var_zd = 1 / (4 * n_effec),
-    deff_provi = deff
+    provi = provi,             # Id para los dominios
+    nd = n,                    # Número de observaciones por dominios
+    n_effec = n.eff,           # n efectivo. 
+    pobreza = p,               # Estimación de la variable
+    pobreza_T = asin(sqrt(pobreza)), # Transformación arcsin 
+    vardir = ee ^ 2,                 # Estimación de la varianza directa 
+    cv = CV,                       
+    var_zd = 1 / (4 * n_effec),      # Varianza para la tranformación arcsin
+    deff_provi = deff                # Deff por dominio
   )
 
-base_sae1 <- base_sae [base_sae$vardir>0,]
-# View(base_sae1)
-tba(head(base_sae1))
+# View(base_sae)
+tba(head(base_sae))
 ```
 
-
+Seleccionando las variables de interés para la FGV. 
 
 ```{r}
-baseFGV <-  base_sae1 %>% 
+baseFGV <-  base_sae %>% 
   select(provi, pobreza, nd, vardir) %>%
   mutate(ln_sigma2 = log(vardir))
 
@@ -180,16 +215,18 @@ library(patchwork)
 
 # Modelo para la varianza
 
-```{r}
+```{r, results='asis'}
+library(gtsummary)
 FGV1 <- lm(ln_sigma2 ~ 1 + pobreza + 
              nd + I(nd ^ 2) + I(pobreza * nd) +
              I(sqrt(pobreza)) + I(sqrt(nd)) + 
              I(sqrt(pobreza * nd)),
      data = baseFGV)
-summary(FGV1)
+tbl_regression(FGV1) %>% 
+  add_glance_table(include = c(r.squared, adj.r.squared))
 ```
 
-# Ponderador FGV
+Ponderador FGV
 
 ```{r}
 delta.hat = sum(baseFGV$vardir) / 
@@ -197,7 +234,7 @@ delta.hat = sum(baseFGV$vardir) /
 delta.hat
 ```
 
-# Varianza suavizada 
+Varianza suavizada para los dominios observados
 
 
 ```{r}
@@ -205,16 +242,17 @@ hat.sigma <- data.frame(provi = baseFGV$provi,
                         hat_var = delta.hat * exp(fitted.values(FGV1)))
 
 baseFGV$ln_sigma2_pred <- hat.sigma$hat_var
+tba(head(hat.sigma, 10))
 ```
 
-# Validación del modelo para la FGV
+ Validación del modelo para la FGV
 
 ```{r}
 par(mfrow = c(2, 2))
 plot(FGV1)
 ```
 
-# Comparación entre varianza estimada con pronosticada por la FGV
+ Comparación entre varianza estimada con pronosticada por la FGV
 
 ```{r}
 ggplot(baseFGV, 
@@ -223,7 +261,7 @@ ggplot(baseFGV,
   geom_smooth(method = "loess")
 ```
 
-# Varianza suavizada
+Predicción de la varianza suavizada
 
 ```{r}
 prediccion_ln_0 = predict(FGV1, newdata = base_sae %>%
@@ -251,7 +289,7 @@ base_FH <- base_sae %>%
     n_eff_FGV = nd / deff_FGV
   )
 
-saveRDS(object = base_FH, "../Data/base_FH_2019.rds")
+saveRDS(object = base_FH, "../Data/base_FH_2021.rds")
 ```
 
 # Análisis gráfico

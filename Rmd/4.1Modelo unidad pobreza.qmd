@@ -1,0 +1,441 @@
+---
+title: "Estimación de la tasa de probreza "
+subtitle: "CEPAL - División de Estadísticas Sociales"
+author: "Andrés Gutiérrez - Stalyn Guerrero"
+format: html
+project:
+  type: website
+  output-dir: docs
+---
+
+```{r setup, include=FALSE, message=FALSE, error=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  cache = TRUE,
+  cache.path = "0Recursos/4.1Modelo_unidad_pobreza/",
+  fig.path = "0Recursos/4.1Modelo_unidad_pobreza_fig/"
+)
+library(printr)
+library(kableExtra)
+library(tidyverse)
+tba <- function(dat, cap = NA){
+  kable(dat,
+      format = "html", digits =  4,
+      caption = cap) %>% 
+     kable_styling(bootstrap_options = "striped", full_width = F)%>%
+         kable_classic(full_width = F, html_font = "Arial Narrow")
+}
+```
+
+Lo primero a tener en cuenta, es que no se debe usar una regresión lineal cuando se tiene una variable de tipo  binario como variable dependiente, ya que no es posible estimar la probabilidad del evento estudiado de manera directa, por esta razón se emplea una regresión logística, en la que para obtener las estimaciones          de la probabilidad del evento estudiado se debe realizar una transformación (logit), lo cual consiste en          tomar el logaritmo de la probabilidad de éxito entre la probabilidad de fracaso, de la siguiente manera:  
+
+$$
+\ln \frac{p}{1-p}
+$$
+donde $p$ representa la probabilidad de éxito del evento.  
+
+## Modelo de regresión logistica. 
+
+Sea 
+$$
+y_{ji}=\begin{cases}
+1 & w_{ji}\le lp\\
+0 & e.o.c.
+\end{cases}
+$$ 
+donde $w_{ji}$ representa el ingreso de la $i$-ésima persona en el $j$-ésimo post-estrato y $lp$ es un valor limite, en particular la linea de pobreza. Empleando un modelo de regresión logística de efecto aleatorios pretende establecer la relación entre la expectativa $\rho_{di}$  de la variable dicotómica con las covariables de información auxiliar disponibles para ser incluidas. El procedimiento correspondiente a este proceso, modela el logaritmo del cociente entre la probabilidad de estar por debajo de la linea de pobreza  a su complemento en relación al conjunto de covariables a nivel de unidad, $x_{ji}$, y el conjunto de covariables a nivel de provicia, $z_d$.     
+
+$$
+\begin{eqnarray*}
+\ln\left(\frac{\rho_{ji}}{1-\rho_{ji}}\right)=\boldsymbol{x}_{ji}^{t}\boldsymbol{\beta}+\boldsymbol{z}_{d}\boldsymbol{\gamma}
+\end{eqnarray*}
+$$
+
+Donde los coeficientes $\boldsymbol{\beta}$ hacen referencia a los efectos aleatorios de las variables $x_{ji}^t$  sobre las probabilidades de que la $i$-ésima persona este por debajo de la linea de pobreza; por otro lado, los coeficientes $\boldsymbol{\gamma}$ expresan los efectos fijos sobre las covariables a nivel provincia, $z_d$. 
+
+Para este caso se asumen las distribuciones previas
+
+$$
+\begin{eqnarray*}
+\beta_k & \sim   & N(0, \tau^2_0)\\
+\gamma_d &\sim & N(0,\tau^2_1)
+\end{eqnarray*}
+$$ las cuales se toman no informativas.
+
+A continuación se muestra el proceso realizado para la obtención de la predicción de la tasa de pobreza por provincia.
+
+## Proceso de estimación en `R`
+
+Para desarrollar la metodología se hace uso de las siguientes librerías.
+
+```{r}
+# Interprete de STAN en R
+library(rstan)
+library(rstanarm)
+# Manejo de bases de datos.
+library(tidyverse)
+# Gráficas de los modelos. 
+library(bayesplot)
+library(patchwork)
+# Organizar la presentación de las tablas
+library(kableExtra)
+library(printr)
+```
+
+Un conjunto de funciones desarrolladas para realizar de forma simplificada los procesos están consignadas en la siguiente rutina.
+
+```{r}
+source("0Recursos/0Funciones/funciones_mrp.R")
+```
+
+Entre las funciones incluidas en el archivo encuentra
+
+-   *plot_interaction*: Esta crea un diagrama de lineas donde se estudia la interacción entre las variables, en el caso de presentar un traslape de las lineas se recomienda incluir el interacción en el modelo.
+
+-   *Plot_Compare* Puesto que es necesario realizar una homologar la información del censo y la encuesta es conveniente llevar a cabo una validación de las variables que han sido homologadas, por tanto, se espera que las proporciones resultantes del censo y la encuesta estén cercanas entre sí.
+
+-   *Aux_Agregado*: Esta es función permite obtener estimaciones a diferentes niveles de agregación, toma mucha relevancia cuando se realiza un proceso repetitivo.
+
+**Las funciones están diseñada específicamente  para este  proceso**
+
+### Encuesta de hogares
+
+Los datos empleados en esta ocasión corresponden a la ultima encuesta de hogares, la cual ha sido estandarizada por *CEPAL* y se encuentra disponible en *BADEHOG*
+
+```{r}
+encuesta <- readRDS("../Data/encuestaPER21N.rds")
+
+encuesta_mrp <- encuesta %>% 
+  transmute(
+    depto,
+    provi = substr(ubigeo,1,4),
+    
+    pobreza = ifelse(ingcorte < lp,1,0),
+    
+  area = case_when(areageo2 == 1 ~ "1", TRUE ~ "0"),
+  sexo = as.character(sexo),
+ anoest = case_when(
+    edad < 4 | anoest == -1   ~ "98"  , #No aplica
+    anoest == 99 ~ "99", #NS/NR
+    anoest == 0  ~ "1", # Sin educacion
+    anoest %in% c(1:6) ~ "2",       # 1 - 6
+    anoest %in% c(7:12) ~ "3",      # 7 - 12
+    anoest > 12 ~ "4",      # mas de 12
+    TRUE ~ "Error"  ),
+  
+  edad = case_when(
+    edad < 15 ~ "1",
+    edad < 30 ~ "2",
+    edad < 45 ~ "3",
+    edad < 65 ~ "4",
+    TRUE ~ "5"),
+  
+  
+  etnia = case_when(
+    etnia_ee == 1 ~ "1", # Indigena
+    etnia_ee == 2 ~ "2", # Negro Mulato Afroperuano
+    TRUE ~ "3"), # Otro
+  fep = `_fep`
+) 
+
+tba(encuesta_mrp %>% head(10)) 
+```
+
+La base de datos de la encuesta tiene la siguientes columnas: 
+
+-   *depto*: Corresponde al código asignado a la segunda división administrativa del país.
+
+-   *provi*: Corresponde al código asignado a la tercera división administrativa del país.
+
+-     *lp* y *li* lineas de pobreza y pobreza extrema definidas por CEPAL. 
+
+-     *área* división geográfica (Urbano y Rural). 
+
+-     *sexo* Hombre y Mujer. 
+
+-     *etnia* En estas variable se definen tres grupos:  afrodescendientes, indígenas y Otros. 
+
+-     Años de escolaridad (*anoest*) 
+
+-     Rangos de edad (*edad*) 
+
+-     Factor de expansión por persona (*fep*)
+
+
+Ahora, inspeccionamos el comportamiento de la variable de interés: 
+
+```{r, fig.cap= "Proporción de personas por debajo de la linea de pobreza"}
+tab <- encuesta %>% group_by(pobreza) %>% 
+  tally() %>%
+  mutate(prop = round(n/sum(n),2),
+         pobreza = ifelse(pobreza == 1, "Si", "No"))
+
+ggplot(data = tab, aes(x = pobreza, y = prop)) +
+  geom_bar(stat = "identity") + 
+  labs(y = "", x = "") +
+  geom_text(aes(label = paste(prop*100,"%")), 
+            nudge_y=0.05) +
+  theme_bw(base_size = 20) +
+  theme(axis.text.y = element_blank(),
+        axis.ticks = element_blank())
+
+```
+
+
+La información auxiliar disponible ha sido extraída del censo  e imágenes satelitales
+
+```{r}
+statelevel_predictors_df <- readRDS("../Data/statelevel_predictors_df_provi.rds") %>% 
+   mutate_at(.vars = c("F182013_stable_lights",
+                      "X2016_crops.coverfraction",
+                      "X2016_urban.coverfraction",
+                      "X2016_gHM",
+                      "accessibility",
+                      "accessibility_walking_only"),
+            function(x) scale(x)*2+5)
+tba(statelevel_predictors_df  %>%  head(10))
+```
+
+
+### Niveles de agregación para colapsar la encuesta
+
+Después de realizar una investigación en la literatura especializada y realizar estudios de simulación fue posible evidenciar que las predicciones obtenidas con la muestra sin agregar y la muestra agregada convergen a la media del dominio. 
+
+```{r}
+byAgrega <- c("depto", "provi",  "area", 
+              "sexo",   "anoest", "edad",   "etnia" )
+ 
+```
+
+### Creando base con la encuesta agregada
+
+El resultado de agregar la base de dato se muestra a continuación:
+
+```{r}
+encuesta_df_agg <-
+  encuesta_mrp %>%                    # Encuesta  
+  group_by_at(all_of(byAgrega)) %>%   # Agrupar por el listado de variables
+  summarise(n = n(),                  # Número de observaciones
+  # conteo de personas con características similares.           
+             pobreza = sum(pobreza),
+             no_pobreza = n-pobreza,
+            .groups = "drop") %>%     
+  arrange(desc(pobreza))                    # Ordenar la base.
+```
+
+La tabla obtenida es la siguiente: 
+
+```{r, echo=FALSE}
+tba(encuesta_df_agg %>% head(10))
+```
+El paso a seguir es unificar las tablas creadas. 
+
+```{r}
+encuesta_df_agg <- inner_join(encuesta_df_agg, statelevel_predictors_df)
+```
+
+### Definiendo el modelo multinivel.
+
+Después de haber ordenado la encuesta, podemos pasar a la definición del modelo.
+
+```{r, eval = FALSE}
+options(mc.cores = parallel::detectCores()) # Permite procesar en paralelo. 
+fit <- stan_glmer(
+  cbind(pobreza, no_pobreza) ~                              
+    (1 | provi) +                          # Efecto aleatorio (ud)
+    edad +                               # Efecto fijo (Variables X)
+    sexo  + 
+    tasa_desocupacion +
+    F182013_stable_lights + 
+    X2016_crops.coverfraction +
+    X2016_urban.coverfraction ,
+                  weights = n,            # Número de observaciones. 
+                  data = encuesta_df_agg, # Encuesta agregada 
+                  verbose = TRUE,         # Muestre el avance del proceso
+                  chains = 4,             # Número de cadenas.
+                 iter = 500,              # Número de realizaciones de la cadena
+         cores = 4,
+      family = binomial(link = "logit")
+                )
+saveRDS(fit, file = "../Data/fit_pobreza.rds")
+```
+
+Después de esperar un tiempo prudente se obtiene el siguiente modelo.
+
+```{r}
+fit <- readRDS("../Data/fit_pobreza.rds")
+```
+
+
+```{r, echo=FALSE}
+tba(coef(fit)$provi %>% head(10))
+```
+
+# Proceso de estimación y predicción
+
+Obtener el modelo es solo un paso más, ahora se debe realizar la predicción en el censo, el cual fue estandarizado y homologado con la encuesta previamente. 
+
+```{r}
+poststrat_df <- readRDS("../Data/censo_provi.rds") %>% 
+     left_join(statelevel_predictors_df) 
+tba( poststrat_df %>% arrange(desc(n)) %>% head(10))
+```
+Note que la información del censo esta agregada.
+
+### Distribución posterior.
+
+Para obtener una distribución posterior de cada observación se hace uso de la función *posterior_epred* de la siguiente forma.
+
+```{r}
+epred_mat <- posterior_epred(fit, newdata = poststrat_df, type = "response")
+dim(epred_mat)
+dim(poststrat_df)
+```
+
+Por ser una predicción en post-estrato no observados, es posible obtener valores negativos de la variable, los cuales deben ser ajustados de forma manual.
+
+```{r, eval=TRUE}
+## validación de los valores posteriores
+hist(as.numeric(epred_mat))
+```
+
+
+## Estimación de la tasa de pobreza
+
+```{r}
+n_filtered <- poststrat_df$n
+mrp_estimates <- epred_mat %*% n_filtered / sum(n_filtered)
+
+(temp_ing <- data.frame(
+  mrp_estimate = mean(mrp_estimates),
+  mrp_estimate_se = sd(mrp_estimates)
+) )
+```
+
+El resultado nos indica que el ingreso medio nacional es `r round(temp_ing$mrp_estimate,2)` lineas de pobreza
+
+### Estimación para el depto == "01".
+
+Es importante siempre conservar el orden de la base, dado que relación entre la predicción y el censo en uno a uno.
+
+```{r}
+
+temp <- poststrat_df %>%  mutate(depto = str_sub(provi, 1,2), Posi = 1:n())
+temp <- filter(temp, depto == "01") %>% select(n, Posi)
+n_filtered <- temp$n
+temp_epred_mat <- epred_mat[, temp$Posi]
+
+## Estimando el CME
+mrp_estimates <- temp_epred_mat %*% n_filtered / sum(n_filtered)
+
+(temp_ing <- data.frame(
+  mrp_estimate = mean(mrp_estimates),
+  mrp_estimate_se = sd(mrp_estimates)
+) )
+```
+
+El resultado nos indica que la tasa de pobreza en el departamento 01 es `r round(temp_ing$mrp_estimate,2)`
+
+### Estimación para la provi == "0101"
+
+```{r}
+temp <- poststrat_df %>%  mutate(Posi = 1:n())
+temp <-
+  filter(temp, provi == "0101") %>% select(n, Posi)
+n_filtered <- temp$n
+temp_epred_mat <- epred_mat[, temp$Posi]
+## Estimando el CME
+mrp_estimates <- temp_epred_mat %*% n_filtered / sum(n_filtered)
+
+(temp_ing <- data.frame(
+  mrp_estimate = mean(mrp_estimates),
+  mrp_estimate_se = sd(mrp_estimates)
+) )
+```
+
+El resultado nos indica que la tasa de pobreza en la provincia 0101 es `r round(temp_ing$mrp_estimate,2)`
+
+Después de comprender la forma en que se realiza la estimación de los dominios no observados procedemos el uso de la función *Aux_Agregado* que es desarrollada para este fin.
+
+```{r, eval=TRUE}
+(mrp_estimate_Ingresolp <-
+  Aux_Agregado(poststrat = poststrat_df,
+             epredmat = epred_mat,
+             byMap = NULL)
+)
+```
+
+De forma similar es posible obtener los resultados para departamento y provincia. 
+
+```{r, eval=TRUE}
+mrp_estimate_depto <-
+  Aux_Agregado(poststrat = poststrat_df %>% 
+                 mutate(depto = str_sub(provi, 1,2)),
+             epredmat = epred_mat,
+             byMap = "depto")
+tba(mrp_estimate_depto, cap = "24 departamentos y 1 provincia constitucional")
+```
+
+
+
+```{r, eval=TRUE}
+mrp_estimate_provi <-
+  Aux_Agregado(poststrat = poststrat_df,
+             epredmat = epred_mat,
+             byMap = "provi")
+
+tba(mrp_estimate_provi %>% head(10) )
+```
+
+
+## Algunos mapas resultantes
+
+
+```{r, echo=FALSE, fig.cap = "Tasa de pobreza por provincia"}
+library(sp)
+library(sf)
+library(tmap)
+
+## Leer Shapefile del país
+ShapeSAE <- read_sf("../Shape/PROVINCIAS.shp")%>% 
+            mutate(provi = str_pad(IDPROV, pad = "0", width = 4))
+
+mapa <- tm_shape(ShapeSAE %>%
+                left_join(mrp_estimate_provi,  by = "provi"))
+
+brks_lp <- c(0,0.05, 0.1, 0.2, 0.25, 0.30, 0.4,1)
+tmap_options(check.and.fix = TRUE)
+Mapa_lp <-
+  mapa + tm_polygons(
+    c( "mrp_estimate"),
+     breaks = brks_lp,
+    title = "Pobreza",
+    palette = "YlOrRd",
+    colorNA = "white"
+  ) + tm_layout(asp = 0)
+
+Mapa_lp
+```
+
+
+
+```{r, echo=FALSE, fig.cap= "Tasa de pobreza por provincia, sexo y edad", out.height="300%"}
+## Leer Shape del pais
+mrp_estimate_sexo_edad <-
+  Aux_Agregado(poststrat = poststrat_df %>% 
+                 mutate(depto = str_sub(provi, 1,2)),
+             epredmat = epred_mat,
+             byMap = c("provi","sexo", "edad"))
+
+Aux_Maps(Shape = ShapeSAE %>% rename(depto = provi),
+         dat_df = mrp_estimate_sexo_edad %>% 
+           rename(depto = provi, 
+                  Benchmarking_estimate = mrp_estimate),
+         fnames = "sexo", 
+         cnames = "edad",
+         brks = brks_lp, 
+         color_p = "YlOrRd")
+
+```
