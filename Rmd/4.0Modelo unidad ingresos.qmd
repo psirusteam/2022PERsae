@@ -271,6 +271,21 @@ fit <- readRDS("../Data/fit_ingresos.rds")
 ```{r, echo=FALSE}
 tba(coef(fit)$provi %>% head(10))
 ```
+Validación del modelo 
+
+```{r}
+library(posterior)
+library(bayesplot)
+
+encuesta_mrp2 <- inner_join(encuesta_mrp, statelevel_predictors_df)
+y_pred_B <- posterior_epred(fit, newdata = encuesta_mrp2)
+rowsrandom <- sample(nrow(y_pred_B), 100)
+y_pred2 <- y_pred_B[rowsrandom, ]
+ppc_dens_overlay(y = as.numeric(encuesta_mrp2$ingreso), y_pred2) +
+  
+```
+
+
 
 # Proceso de estimación y predicción
 
